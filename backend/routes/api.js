@@ -6,8 +6,8 @@ router.post("/upload", async (req, res) => {
   try {
     const image = req.file.buffer; // Access the image buffer
     const apiUrl =
-      "https://carsdetectionmission2-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/1067534d-d945-445d-85f0-7b51f426a851/detect/iterations/Iteration1/image";
-    const predictionKey = "7a33a72e7db246c496900082f1406132";
+      "https://customcarvisionmrhq-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/0710a460-649f-495d-bb56-6a0aa84657a8/classify/iterations/Iteration6/image";
+    const predictionKey = "8cc122f8a0284cc8b8dbc330cd63e03e";
 
     const response = await axios.post(apiUrl, image, {
       headers: {

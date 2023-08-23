@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import carsData from "./cars.json"; // Import your JSON data
 
 const ImageUploader = () => {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [predictions, setPredictions] = useState([]);
+  const [similarCar, setSimilarCar] = useState(null);
 
   const handleImageChange = (event) => {
     setSelectedImage(event.target.files[0]);
@@ -24,8 +25,19 @@ const ImageUploader = () => {
         formData
       );
 
-      // Update the predictions state with the top 3 predictions
-      setPredictions(response.data.response.predictions.slice(0, 3));
+      console.log("API Response:", response.data);
+
+      const topPrediction = response.data.response.predictions[0];
+
+      // Find the first similar car based on the top prediction
+      const similarCar = carsData.carsList.find(
+        (car) => car.model.toLowerCase() === topPrediction.tagName.toLowerCase()
+      );
+
+      console.log("Found Similar Car:", similarCar);
+
+      // Update the similarCar state with the found similar car
+      setSimilarCar(similarCar);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -37,15 +49,22 @@ const ImageUploader = () => {
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <button onClick={handleImageUpload}>Upload</button>
 
-      <h2>Top 3 Predictions</h2>
-      <ul>
-        {predictions.map((prediction, index) => (
-          <li key={index}>
-            Class: {prediction.tagName}, Confidence:{" "}
-            {prediction.probability.toFixed(2)}
-          </li>
-        ))}
-      </ul>
+      {similarCar && (
+        <div>
+          <h2>Similar Car</h2>
+          <div>
+            <h3>
+              {similarCar.brand} {similarCar.model}
+            </h3>
+            <p>Year: {similarCar.year}</p>
+            <p>Color: {similarCar.color}</p>
+            <img
+              src={similarCar.imageURL}
+              alt={`${similarCar.brand} ${similarCar.model}`}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
