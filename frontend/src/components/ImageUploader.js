@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import carsData from "./cars.json"; // Import your JSON data
+import carsData from "./cars.json";
 
 const ImageUploader = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -27,17 +27,30 @@ const ImageUploader = () => {
 
       console.log("API Response:", response.data);
 
-      const topPrediction = response.data.response.predictions[0];
-
-      // Find the first similar car based on the top prediction
-      const similarCar = carsData.carsList.find(
-        (car) => car.model.toLowerCase() === topPrediction.tagName.toLowerCase()
+      const aiPredictions = response.data.response.predictions;
+      const targetTags = aiPredictions.map((prediction) =>
+        prediction.tagName.toLowerCase()
       );
 
-      console.log("Found Similar Car:", similarCar);
+      // console.log('top prediction:', response.data.response.predictions[0])
+      let similarCars = [];
+      // Find the first similar car based on the top prediction
+      for (let i = 0; i < Math.min(3, targetTags.length); i++) {
+        const filteredCars = carsData.carsList.filter(
+          (car) => car.model.toLowerCase() === targetTags[i]
+        );
+
+        if (filteredCars.length > 0 && similarCars.length < 3) {
+          for (const car of filteredCars) {
+            similarCars.push(car);
+          }
+        }
+      }
+
+      console.log("Found Similar Car:", similarCars);
 
       // Update the similarCar state with the found similar car
-      setSimilarCar(similarCar);
+      setSimilarCar(similarCars);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -51,18 +64,17 @@ const ImageUploader = () => {
 
       {similarCar && (
         <div>
-          <h2>Similar Car</h2>
-          <div>
-            <h3>
-              {similarCar.brand} {similarCar.model}
-            </h3>
-            <p>Year: {similarCar.year}</p>
-            <p>Color: {similarCar.color}</p>
-            <img
-              src={similarCar.imageURL}
-              alt={`${similarCar.brand} ${similarCar.model}`}
-            />
-          </div>
+          <h2>Similar Cars</h2>
+          {similarCar.map((car, index) => (
+            <div key={index}>
+              <h3>
+                {car.brand} {car.model}
+              </h3>
+              <p>Year: {car.year}</p>
+              <p>Color: {car.color}</p>
+              <img src={car.imageURL} alt={`${car.brand} ${car.model}`} />
+            </div>
+          ))}
         </div>
       )}
     </div>

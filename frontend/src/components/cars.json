@@ -24,14 +24,7 @@
       "type": "Truck",
       "imageURL": "https://hips.hearstapps.com/hmg-prod/images/tesla-cybertruck-104-1574400035.jpg?crop=1.00xw:0.919xh;0,0.0389xh&resize=980:*"
     },
-    {
-      "brand": "Tesla",
-      "model": "Cybertruck",
-      "year": 2024,
-      "color": "Silver",
-      "type": "Truck",
-      "imageURL": "https://hips.hearstapps.com/hmg-prod/images/tesla-cybertruck-104-1574400035.jpg?crop=1.00xw:0.919xh;0,0.0389xh&resize=980:*"
-    },
+
     {
       "brand": "Lambourghini",
       "model": "Veneno",
