@@ -1,60 +1,65 @@
+
 import React, { useState } from "react";
 import axios from "axios";
 import carsData from "./cars.json";
 
 const ImageUploader = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [similarCar, setSimilarCar] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [similarCar, setSimilarCar] = useState(null)
 
   const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
-  };
+    setSelectedImage(event.target.files[0])
+  }
 
   const handleImageUpload = async () => {
     try {
       if (!selectedImage) {
-        console.log("No image selected.");
-        return;
+        console.log('No image selected.')
+        return
       }
 
-      const formData = new FormData();
-      formData.append("image", selectedImage);
+      const formData = new FormData()
+      formData.append('image', selectedImage)
 
       const response = await axios.post(
-        "http://localhost:5000/api/upload",
+        'http://localhost:5000/api/upload',
         formData
-      );
+      )
 
-      console.log("API Response:", response.data);
+      console.log('API Response:', response.data)
 
-      const aiPredictions = response.data.response.predictions;
+
+      const aiPredictions = response.data.response.predictions
       const targetTags = aiPredictions.map((prediction) =>
         prediction.tagName.toLowerCase()
-      );
+      )
 
       // console.log('top prediction:', response.data.response.predictions[0])
-      let similarCars = [];
+      let similarCars = []
+
       // Find the first similar car based on the top prediction
       for (let i = 0; i < Math.min(3, targetTags.length); i++) {
         const filteredCars = carsData.carsList.filter(
           (car) => car.model.toLowerCase() === targetTags[i]
-        );
+
+        )
 
         if (filteredCars.length > 0 && similarCars.length < 3) {
           for (const car of filteredCars) {
-            similarCars.push(car);
+            similarCars.push(car)
           }
         }
       }
 
-      console.log("Found Similar Car:", similarCars);
+      console.log('Found Similar Car:', similarCars)
 
       // Update the similarCar state with the found similar car
-      setSimilarCar(similarCars);
+      setSimilarCar(similarCars)
+
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error)
     }
-  };
+  }
 
   return (
     <div>
@@ -78,7 +83,7 @@ const ImageUploader = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ImageUploader;
+export default ImageUploader
