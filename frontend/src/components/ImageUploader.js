@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import carsData from './cars.json' // Import your JSON data
+
+import React, { useState } from "react";
+import axios from "axios";
+import carsData from "./cars.json";
 
 const ImageUploader = () => {
   const [selectedImage, setSelectedImage] = useState(null)
@@ -27,6 +28,7 @@ const ImageUploader = () => {
 
       console.log('API Response:', response.data)
 
+
       const aiPredictions = response.data.response.predictions
       const targetTags = aiPredictions.map((prediction) =>
         prediction.tagName.toLowerCase()
@@ -34,10 +36,12 @@ const ImageUploader = () => {
 
       // console.log('top prediction:', response.data.response.predictions[0])
       let similarCars = []
+
       // Find the first similar car based on the top prediction
       for (let i = 0; i < Math.min(3, targetTags.length); i++) {
         const filteredCars = carsData.carsList.filter(
           (car) => car.model.toLowerCase() === targetTags[i]
+
         )
 
         if (filteredCars.length > 0 && similarCars.length < 3) {
@@ -51,6 +55,7 @@ const ImageUploader = () => {
 
       // Update the similarCar state with the found similar car
       setSimilarCar(similarCars)
+
     } catch (error) {
       console.error('Error:', error)
     }
