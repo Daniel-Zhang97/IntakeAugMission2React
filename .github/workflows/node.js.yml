@@ -30,19 +30,19 @@ jobs:
         cache: 'npm'
 
     - name: Install frontend dependencies
-      working-directory: frontend
+      working-directory: ./frontend
       run: npm install
 
     - name: Install backend dependencies
-      working-directory: backend
+      working-directory: ./backend
       run: npm install
 
     - name: Start frontend
-      working-directory: frontend
+      working-directory: ./frontend
       run: npm start
 
     - name: Start backend
-      working-directory: backend
+      working-directory: ./backend
       run: npm start
 
     - name: Upload artifact for deployment job
